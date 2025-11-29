@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMSSync</string>
+    <string name="sms_endpoint">https://focapi.feiyang.ac.cn/v1/user/smscatcher</string>
+</resources>

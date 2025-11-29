@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>提交短信</title>
+<style>
+body{font-family:system-ui,Arial;margin:20px}
+input,button,textarea{padding:8px;margin:4px;width:100%;max-width:600px}
+</style>
+</head>
+<body>
+<h1>提交短信</h1>
+<input id="phone" placeholder="手机号">
+<input id="address" placeholder="地址">
+<textarea id="body" placeholder="内容"></textarea>
+<input id="timestamp" placeholder="时间戳(毫秒)">
+<button id="send">发送</button>
+<pre id="out"></pre>
+<script>
+const api=location.origin+"/api/smscatcher.php";
+document.getElementById('timestamp').value=Date.now().toString();
+document.getElementById('send').onclick=async()=>{
+ const payload={
+  phone_number:document.getElementById('phone').value.trim(),
+  address:document.getElementById('address').value.trim(),
+  body:document.getElementById('body').value,
+  timestamp:parseInt(document.getElementById('timestamp').value.trim()||Date.now())
+ };
+ const res=await fetch(api,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+ const txt=await res.text();
+ document.getElementById('out').textContent=txt;
+};
+</script>
+</body>
+</html>

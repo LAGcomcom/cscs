@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>短信列表</title>
+<style>
+body{font-family:system-ui,Arial;margin:20px}
+input,button{padding:8px;margin:4px}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #ccc;padding:8px;text-align:left}
+</style>
+</head>
+<body>
+<h1>短信列表</h1>
+<div>
+<input id="phone" placeholder="按手机号过滤">
+<button id="refresh">刷新</button>
+</div>
+<table>
+<thead><tr><th>手机号</th><th>地址</th><th>内容</th><th>时间戳</th><th>接收时间</th></tr></thead>
+<tbody id="tbody"></tbody>
+</table>
+<script>
+const api=location.origin+"/api/list.php";
+async function load(){
+ const phone=document.getElementById('phone').value.trim();
+ const url=new URL(api);
+ if(phone) url.searchParams.set('phone_number',phone);
+ url.searchParams.set('limit','200');
+ const res=await fetch(url.toString());
+ const data=await res.json();
+ const tb=document.getElementById('tbody');
+ tb.innerHTML='';
+ for(const r of data){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td>${r.phone_number||''}</td><td>${r.address}</td><td>${r.body}</td><td>${r.timestamp}</td><td>${r.received_at}</td>`;
+  tb.appendChild(tr);
+ }
+}
+document.getElementById('refresh').onclick=load;
+load();
+</script>
+</body>
+</html>
